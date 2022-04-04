@@ -1,0 +1,9 @@
+name: RedTNTTrace
+version: '${project.version}'
+main: me.kekschen.redtnttrace.RedTNTTrace
+api-version: 1.17
+authors: [ Kekschen ]
+description: Records TNT movement to view path later on
+website: https://github.com/Kek5chen
+commands:
+  trace:
