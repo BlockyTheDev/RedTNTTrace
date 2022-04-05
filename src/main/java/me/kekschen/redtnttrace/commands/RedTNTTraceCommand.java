@@ -1,22 +1,13 @@
 package me.kekschen.redtnttrace.commands;
 
-import me.kekschen.redtnttrace.annotations.MainCommand;
-import me.kekschen.redtnttrace.annotations.Permission;
-import me.kekschen.redtnttrace.annotations.RestrictTo;
-import me.kekschen.redtnttrace.annotations.SubCommand;
+import me.kekschen.redtnttrace.annotations.*;
 import me.kekschen.redtnttrace.api.MessageAPI;
 import me.kekschen.redtnttrace.interfaces.RedCommand;
 import me.kekschen.redtnttrace.managers.TraceManager;
 import me.kekschen.redtnttrace.types.TraceOption;
 import me.kekschen.redtnttrace.types.TraceRecord;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
 @MainCommand("trace")
 public class RedTNTTraceCommand extends RedCommand {
@@ -34,15 +25,15 @@ public class RedTNTTraceCommand extends RedCommand {
 	@RestrictTo(Player.class)
 	public void viewTrace(Player player, String[] args) {
 		TraceRecord record = TraceManager.getTraceRecord(player);
-		if(record == null) {
+		if (record == null) {
 			MessageAPI.sendMessage(player, "§7You haven't recorded any TNT trace yet");
 			return;
 		}
-		if(record.isInProgress) {
+		if (record.isInProgress) {
 			MessageAPI.sendMessage(player, "§7Your TNT trace is still in progress. Use §f/trace toggle §7to stop it.");
 			return;
 		}
-		if(record.tntLocations.size() == 0) {
+		if (record.tntLocations.size() == 0) {
 			MessageAPI.sendMessage(player, "§7You did not trace any TNT. Use §f/trace toggle §7to start tracing.");
 			return;
 		}
@@ -55,7 +46,7 @@ public class RedTNTTraceCommand extends RedCommand {
 	@RestrictTo(Player.class)
 	public void hideTrace(Player player, String[] args) {
 		boolean hidden = TraceManager.hideTrace(player);
-		if(hidden) {
+		if (hidden) {
 			MessageAPI.sendMessage(player, "§7TNT trace is now §ahidden");
 		} else {
 			MessageAPI.sendMessage(player, "§cThere is no TNT trace to hide");
@@ -63,22 +54,23 @@ public class RedTNTTraceCommand extends RedCommand {
 	}
 
 	@SubCommand("option * *")
+	@DynamicTabComplete({"show_id_tags,show_fuel,only_explosions", "* true,* false"})
 	@Permission("rwm.redtnttrace.use")
 	@RestrictTo(Player.class)
 	public void setOption(Player player, String[] args) {
 		TraceOption option;
 		try {
 			option = TraceOption.valueOf(args[1].toUpperCase());
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			MessageAPI.sendMessage(player, "§cThe option §f" + args[1] + "§c does not exist");
 			return;
 		}
 		boolean state = Boolean.parseBoolean(args[2]);
-		if(state)
+		if (state)
 			TraceManager.enableTraceOption(player, option);
 		else
 			TraceManager.disableTraceOption(player, option);
-		if(TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
+		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
 		MessageAPI.sendMessage(player, "§7Option §f" + args[1] + "§7 is now " + (state ? "§aenabled" : "§cdisabled"));
 	}
@@ -89,12 +81,13 @@ public class RedTNTTraceCommand extends RedCommand {
 	public void listOptions(Player player, String[] args) {
 		TraceOption[] options = TraceOption.values();
 		MessageAPI.sendMessage(player, "§7All available trace options are:");
-		for(TraceOption option : options) {
+		for (TraceOption option : options) {
 			MessageAPI.sendMessage(player, "§7- §f" + option.name().toLowerCase());
 		}
 	}
 
 	@SubCommand("mask *")
+	@DynamicTabComplete({"1-100000"})
 	@Permission("rwm.redtnttrace.use")
 	@RestrictTo(Player.class)
 	public void setMask(Player player, String[] args) {
@@ -102,18 +95,18 @@ public class RedTNTTraceCommand extends RedCommand {
 		int min, max;
 		try {
 			min = Integer.parseInt(masks[0]);
-			if(masks.length == 2)
+			if (masks.length == 2)
 				max = Integer.parseInt(masks[1]);
 			else
 				max = min;
-			if(min < 0 || max < 0 || min > max)
+			if (min < 0 || max < 0 || min > max)
 				throw new NumberFormatException();
 		} catch (NumberFormatException e) {
 			MessageAPI.sendMessage(player, "§cThe mask §f" + args[1] + "§c is not valid");
 			return;
 		}
 		TraceManager.setTraceMask(player, min, max);
-		if(TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
+		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
 		MessageAPI.sendMessage(player, "§7You are now tracing TNTs with a mask of §f" + min + "-" + max);
 	}
