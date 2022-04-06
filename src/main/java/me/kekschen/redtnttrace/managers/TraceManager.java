@@ -10,7 +10,6 @@ import org.bukkit.World;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -101,8 +100,32 @@ public class TraceManager {
 	}
 
 	static HashMap<Player, List<FallingBlock>> spawnedTNTs = new HashMap<>();
+	private static FallingBlock spawnTntPreset(Location location) {
+		FallingBlock tnt = location.getWorld().spawnFallingBlock(location, Material.TNT.createBlockData());
+		tnt.setDropItem(false);
+		tnt.setCustomNameVisible(true);
+		tnt.setGravity(false);
+		tnt.setVelocity(new Vector());
+		tnt.setTicksLived(1);
+		return tnt;
+	}
+
+	private static void showTraceTnt(Player player, Location location, boolean exploded, int id, int tick) {
+		FallingBlock tnt = spawnTntPreset(location);
+		if(isTraceOptionEnabled(player, TraceOption.SHOW_ID_TAGS)) {
+			if (exploded)
+				tnt.setCustomName("§7#" + id + "-" + id + " §4§lBOOM!");
+			else
+				tnt.setCustomName("§7#" + id + "-" + tick);
+		} else if (exploded)
+			tnt.setCustomName("§4§lBOOM!");
+		List<FallingBlock> tntList = spawnedTNTs.getOrDefault(player, new ArrayList<>());
+		tntList.add(tnt);
+		spawnedTNTs.put(player, tntList);
+	}
+
 	private static void showTracePart(Player player, int id, List<Location> locations) {
-		int i = 0;
+		int tick = 0;
 		int amount = locations.size();
 		Location firstLocation = locations.get(0);
 		Location lastLocation = locations.get(amount - 1);
@@ -113,28 +136,12 @@ public class TraceManager {
 		Location previousLocation = null;
 		boolean onlyExplosions = isTraceOptionEnabled(player, TraceOption.ONLY_EXPLOSIONS);
 		for(Location location : locations) {
-			i++;
+			tick++;
 			if(previousLocation != null && location.distance(previousLocation) < 1)
 				continue;
-			if(onlyExplosions && i != amount)
+			if(onlyExplosions && tick != amount)
 				continue;
-			FallingBlock tnt = location.getWorld().spawnFallingBlock(location, Material.TNT.createBlockData());
-			tnt.setDropItem(false);
-			if(isTraceOptionEnabled(player, TraceOption.SHOW_ID_TAGS)) {
-				if (i == amount)
-					tnt.setCustomName("§7#" + id + "-" + i + " §4§lBOOM!");
-				else
-					tnt.setCustomName("§7#" + id + "-" + i);
-			} else if (i == amount)
-				tnt.setCustomName("§4§lBOOM!");
-			tnt.setCustomNameVisible(true);
-			tnt.setGravity(false);
-			tnt.setVelocity(new Vector());
-			tnt.setTicksLived(1);
-			tnt.setMetadata("tracetnt", new FixedMetadataValue(RedTNTTrace.getInstance(), true));
-			List<FallingBlock> tntList = spawnedTNTs.getOrDefault(player, new ArrayList<>());
-			tntList.add(tnt);
-			spawnedTNTs.put(player, tntList);
+			showTraceTnt(player, location, tick == amount, id, tick);
 			previousLocation = location;
 		}
 	}
