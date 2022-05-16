@@ -1,5 +1,6 @@
 package me.kekschen.redtnttrace.interfaces;
 
+import me.kekschen.redtnttrace.RedTNTTrace;
 import me.kekschen.redtnttrace.annotations.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
@@ -59,7 +60,7 @@ public class RedCommand implements CommandExecutor, TabCompleter {
 			if (method.isAnnotationPresent(Permission.class)) {
 				Permission permission = method.getAnnotation(Permission.class);
 				if (!sender.hasPermission(permission.value())) {
-					sender.sendMessage("You don't have permission to use this command");
+					sender.sendMessage(RedTNTTrace.LANG.getString("no-permission"));
 					return true;
 				}
 			}

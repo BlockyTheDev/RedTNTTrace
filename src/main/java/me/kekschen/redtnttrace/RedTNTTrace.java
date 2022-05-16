@@ -3,22 +3,24 @@ package me.kekschen.redtnttrace;
 import me.kekschen.redtnttrace.api.MessageAPI;
 import me.kekschen.redtnttrace.commands.RedTNTTraceCommand;
 import me.kekschen.redtnttrace.listeners.PlayerListener;
-import me.kekschen.redtnttrace.managers.TraceManager;
+import me.kekschen.redtnttrace.utils.LanguageHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RedTNTTrace extends JavaPlugin {
 
-	private static RedTNTTrace instance;
-	public static Plugin getInstance() {
-		return instance;
+	private static RedTNTTrace INSTANCE;
+	public static Plugin getINSTANCE() {
+		return INSTANCE;
 	}
-
+	public static LanguageHelper LANG;
 	@Override
 	public void onLoad() {
-		instance = this;
-		MessageAPI.setPrefix("&8[&4§lRed§f§lTNTTrace&8] &7");
+		INSTANCE = this;
+		saveDefaultConfig();
+		LANG = new LanguageHelper(getConfig());
+		MessageAPI.setPrefix(LANG.getPrefix());
 	}
 
 	@Override

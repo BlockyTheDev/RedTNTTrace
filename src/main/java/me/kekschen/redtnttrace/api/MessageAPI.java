@@ -15,6 +15,6 @@ public class MessageAPI {
 	}
 
 	public static void sendMessage(CommandSender sender, String message) {
-		sender.sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', message));
+		sender.sendMessage(getPrefix() + ChatColor.translateAlternateColorCodes('&', message));
 	}
 }
