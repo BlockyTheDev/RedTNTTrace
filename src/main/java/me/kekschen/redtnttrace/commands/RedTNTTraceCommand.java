@@ -93,6 +93,13 @@ public class RedTNTTraceCommand extends RedCommand {
 		}
 	}
 
+	@SubCommand("option")
+	@Permission("rwm.redtnttrace.use")
+	@RestrictTo(Player.class)
+	public void options(Player player, String[] args) {
+		listOptions(player, args);
+	}
+
 	@SubCommand("mask *")
 	@DynamicTabComplete({"1-100000"})
 	@Permission("rwm.redtnttrace.use")
