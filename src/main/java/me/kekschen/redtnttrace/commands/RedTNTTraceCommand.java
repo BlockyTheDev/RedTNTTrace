@@ -128,7 +128,7 @@ public class RedTNTTraceCommand extends RedCommand {
 	@SubCommand("help")
 	@Permission("rwm.redtnttrace.use")
 	public void help(CommandSender sender, String[] args) {
-		MessageAPI.sendMessage(sender, RedTNTTrace.LANG.getString("plugin_header"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("plugin_header"));
 		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.toggle_help"));
 		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.show_help"));
 		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.hide_help"));
