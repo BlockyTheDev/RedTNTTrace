@@ -3,6 +3,7 @@ messages:
   plugin_header: "&4&lRed&r&lTNTTrace &7- &fA plugin to trace TNT explosions"
   plugin_footer: "&7----------------------------------------------------"
   no-permission: "&cYou don't have permission to use this command"
+  invalid-command: "&cThis command does not exist. Check &7/trace help &cfor a list of commands"
   trace:
     tnt_trace_enabled: "&7TNT tracing is now &aenabled"
     tnt_trace_disabled: "&7TNT tracing is now &cdisabled"

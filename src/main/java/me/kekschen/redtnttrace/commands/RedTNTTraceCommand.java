@@ -75,13 +75,6 @@ public class RedTNTTraceCommand extends RedCommand {
 		MessageAPI.sendMessage(player, (state ? RedTNTTrace.LANG.getString("option.option_enabled") : RedTNTTrace.LANG.getString("option.option_disabled")).replace("%name%", args[1]));
 	}
 
-	@SubCommand("option *")
-	@Permission("rwm.redtnttrace.use")
-	@RestrictTo(Player.class)
-	public void invalidOption(Player player, String[] args) {
-		MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("option.invalid_option").replace("%name%", args[1]));
-	}
-
 	@SubCommand("option list")
 	@Permission("rwm.redtnttrace.use")
 	@RestrictTo(Player.class)
