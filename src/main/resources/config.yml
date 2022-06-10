@@ -1,0 +1,29 @@
+prefix: "&8[&4&lRed&f&lTNTTrace&8] &7"
+messages:
+  plugin_header: "&4&lRed&r&lTNTTrace &7- &fA plugin to trace TNT explosions"
+  plugin_footer: "&7----------------------------------------------------"
+  no-permission: "&cYou don't have permission to use this command"
+  invalid-command: "&cThis command does not exist. Check &7/trace help &cfor a list of commands"
+  trace:
+    tnt_trace_enabled: "&7TNT tracing is now &aenabled"
+    tnt_trace_disabled: "&7TNT tracing is now &cdisabled"
+    no_trace_available: "&7You haven't recorded any TNT trace yet"
+    trace_in_progress: "&7Your TNT trace is still in progress. Use &f/trace toggle &7to stop it."
+    no_tnt_traced: "&7You did not trace any TNT. Use &f/trace toggle &7to start tracing."
+    hid_trace: "&7TNT trace is now &ahidden"
+    no_trace_to_hide: "&cThere is no TNT trace to hide"
+  option:
+    invalid_option: "&cThe option &f%name% &cdoes not exist"
+    option_enabled: "&7Option &f%name% &7is now &aenabled"
+    option_disabled: "&7Option &f%name% &7is now &cdisabled"
+    option_list_header: "&7All available trace options are:"
+  mask:
+    invalid_mask: "&cThe mask &f%mask% &cis not valid"
+    tracing_mask: "&7You are now tracing TNTs with a mask of &f%min%-%max%"
+  help:
+    toggle_help: "&7/trace toggle &f- &7Toggle TNT tracing"
+    show_help: "&7/trace show &f- &7Show recorded TNT trace"
+    hide_help: "&7/trace hide &f- &7Hide recorded TNT trace"
+    option_help: "&7/trace option <option> <state> &f- &7Set option for tracing."
+    option_list_help: "&7/trace option list &f- &7List all available options."
+    mask_help: "&7/trace mask <min>-<max> &f- &7Set TNT mask for viewing the trace."

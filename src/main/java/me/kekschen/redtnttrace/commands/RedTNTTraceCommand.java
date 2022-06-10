@@ -1,5 +1,6 @@
 package me.kekschen.redtnttrace.commands;
 
+import me.kekschen.redtnttrace.RedTNTTrace;
 import me.kekschen.redtnttrace.annotations.*;
 import me.kekschen.redtnttrace.api.MessageAPI;
 import me.kekschen.redtnttrace.interfaces.RedCommand;
@@ -11,13 +12,12 @@ import org.bukkit.entity.Player;
 
 @MainCommand("trace")
 public class RedTNTTraceCommand extends RedCommand {
-
 	@SubCommand("toggle")
 	@Permission("rwm.redtnttrace.use")
 	@RestrictTo(Player.class)
 	public void toggleTrace(Player player, String[] args) {
 		TraceManager.toggleTrace(player);
-		MessageAPI.sendMessage(player, "§7TNT tracing is now " + (TraceManager.isTracing(player) ? "§aenabled" : "§cdisabled"));
+		MessageAPI.sendMessage(player, TraceManager.isTracing(player) ? RedTNTTrace.LANG.getString("trace.tnt_trace_enabled") : RedTNTTrace.LANG.getString("trace.tnt_trace_disabled"));
 	}
 
 	@SubCommand("show")
@@ -26,15 +26,15 @@ public class RedTNTTraceCommand extends RedCommand {
 	public void viewTrace(Player player, String[] args) {
 		TraceRecord record = TraceManager.getTraceRecord(player);
 		if (record == null) {
-			MessageAPI.sendMessage(player, "§7You haven't recorded any TNT trace yet");
+			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.no_trace_available"));
 			return;
 		}
 		if (record.isInProgress) {
-			MessageAPI.sendMessage(player, "§7Your TNT trace is still in progress. Use §f/trace toggle §7to stop it.");
+			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.trace_in_progress"));
 			return;
 		}
 		if (record.tntLocations.size() == 0) {
-			MessageAPI.sendMessage(player, "§7You did not trace any TNT. Use §f/trace toggle §7to start tracing.");
+			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.no_tnt_traced"));
 			return;
 		}
 
@@ -47,9 +47,9 @@ public class RedTNTTraceCommand extends RedCommand {
 	public void hideTrace(Player player, String[] args) {
 		boolean hidden = TraceManager.hideTrace(player);
 		if (hidden) {
-			MessageAPI.sendMessage(player, "§7TNT trace is now §ahidden");
+			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.hid_trace"));
 		} else {
-			MessageAPI.sendMessage(player, "§cThere is no TNT trace to hide");
+			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.no_trace_to_hide"));
 		}
 	}
 
@@ -62,7 +62,7 @@ public class RedTNTTraceCommand extends RedCommand {
 		try {
 			option = TraceOption.valueOf(args[1].toUpperCase());
 		} catch (IllegalArgumentException e) {
-			MessageAPI.sendMessage(player, "§cThe option §f" + args[1] + "§c does not exist");
+			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("option.invalid_option").replace("%name%", args[1]));
 			return;
 		}
 		boolean state = Boolean.parseBoolean(args[2]);
@@ -72,7 +72,7 @@ public class RedTNTTraceCommand extends RedCommand {
 			TraceManager.disableTraceOption(player, option);
 		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
-		MessageAPI.sendMessage(player, "§7Option §f" + args[1] + "§7 is now " + (state ? "§aenabled" : "§cdisabled"));
+		MessageAPI.sendMessage(player, (state ? RedTNTTrace.LANG.getString("option.option_enabled") : RedTNTTrace.LANG.getString("option.option_disabled")).replace("%name%", args[1]));
 	}
 
 	@SubCommand("option list")
@@ -80,10 +80,17 @@ public class RedTNTTraceCommand extends RedCommand {
 	@RestrictTo(Player.class)
 	public void listOptions(Player player, String[] args) {
 		TraceOption[] options = TraceOption.values();
-		MessageAPI.sendMessage(player, "§7All available trace options are:");
+		MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("option.option_list_header"));
 		for (TraceOption option : options) {
 			MessageAPI.sendMessage(player, "§7- §f" + option.name().toLowerCase());
 		}
+	}
+
+	@SubCommand("option")
+	@Permission("rwm.redtnttrace.use")
+	@RestrictTo(Player.class)
+	public void options(Player player, String[] args) {
+		listOptions(player, args);
 	}
 
 	@SubCommand("mask *")
@@ -102,25 +109,26 @@ public class RedTNTTraceCommand extends RedCommand {
 			if (min < 0 || max < 0 || min > max)
 				throw new NumberFormatException();
 		} catch (NumberFormatException e) {
-			MessageAPI.sendMessage(player, "§cThe mask §f" + args[1] + "§c is not valid");
+			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("mask.invalid_mask").replace("%mask%", args[1]));
 			return;
 		}
 		TraceManager.setTraceMask(player, min, max);
 		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
-		MessageAPI.sendMessage(player, "§7You are now tracing TNTs with a mask of §f" + min + "-" + max);
+		MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("mask.tracing_mask").replace("%min%", min + "").replace("%max%", max + ""));
 	}
 
 	@SubCommand("help")
 	@Permission("rwm.redtnttrace.use")
 	public void help(CommandSender sender, String[] args) {
-		MessageAPI.sendMessage(sender, "§4§lRed§r§lTNTTrace §7- §fA plugin to trace TNT explosions");
-		MessageAPI.sendMessage(sender, "§7/trace toggle §f- §7Toggle TNT tracing");
-		MessageAPI.sendMessage(sender, "§7/trace show §f- §7Show recorded TNT trace");
-		MessageAPI.sendMessage(sender, "§7/trace hide §f- §7Hide recorded TNT trace");
-		MessageAPI.sendMessage(sender, "§7/trace option <option> <state> §f- §7Set option for tracing.");
-		MessageAPI.sendMessage(sender, "§7/trace option list §f- §7List options for tracing.");
-		MessageAPI.sendMessage(sender, "§7/trace mask <min>-<max> §f- §7Set TNT mask for viewing the trace.");
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("plugin_header"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.toggle_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.show_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.hide_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.option_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.option_list_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.mask_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("plugin_footer"));
 	}
 
 	@SubCommand("")

@@ -1,6 +1,8 @@
 package me.kekschen.redtnttrace.interfaces;
 
+import me.kekschen.redtnttrace.RedTNTTrace;
 import me.kekschen.redtnttrace.annotations.*;
+import me.kekschen.redtnttrace.api.MessageAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.reflections.Reflections;
@@ -53,13 +55,14 @@ public class RedCommand implements CommandExecutor, TabCompleter {
 					break;
 				}
 			}
-			if (!found)
+			if (!found) {
 				continue;
+			}
 
 			if (method.isAnnotationPresent(Permission.class)) {
 				Permission permission = method.getAnnotation(Permission.class);
 				if (!sender.hasPermission(permission.value())) {
-					sender.sendMessage("You don't have permission to use this command");
+					MessageAPI.sendMessage(sender, RedTNTTrace.LANG.getString("no-permission"));
 					return true;
 				}
 			}
@@ -74,10 +77,12 @@ public class RedCommand implements CommandExecutor, TabCompleter {
 
 			try {
 				method.invoke(this, sender, args);
+				return true;
 			} catch (InvocationTargetException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
+		MessageAPI.sendMessage(sender, RedTNTTrace.LANG.getString("invalid-command"));
 
 		return false;
 	}
