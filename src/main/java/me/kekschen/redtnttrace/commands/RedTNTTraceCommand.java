@@ -17,7 +17,8 @@ public class RedTNTTraceCommand extends RedCommand {
 	@RestrictTo(Player.class)
 	public void toggleTrace(Player player, String[] args) {
 		TraceManager.toggleTrace(player);
-		MessageAPI.sendMessage(player, TraceManager.isTracing(player) ? RedTNTTrace.LANG.getString("trace.tnt_trace_enabled") : RedTNTTrace.LANG.getString("trace.tnt_trace_disabled"));
+		MessageAPI.sendMessage(player, TraceManager.isTracing(player) ? RedTNTTrace.LANG.getString("trace.tnt_trace_enabled") 
+				: RedTNTTrace.LANG.getString("trace.tnt_trace_disabled"));
 	}
 
 	@SubCommand("show")
@@ -72,7 +73,8 @@ public class RedTNTTraceCommand extends RedCommand {
 			TraceManager.disableTraceOption(player, option);
 		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
-		MessageAPI.sendMessage(player, (state ? RedTNTTrace.LANG.getString("option.option_enabled") : RedTNTTrace.LANG.getString("option.option_disabled")).replace("%name%", args[1]));
+		MessageAPI.sendMessage(player, (state ? RedTNTTrace.LANG.getString("option.option_enabled") 
+				: RedTNTTrace.LANG.getString("option.option_disabled")).replace("%name%", args[1]));
 	}
 
 	@SubCommand("option list")
@@ -115,7 +117,8 @@ public class RedTNTTraceCommand extends RedCommand {
 		TraceManager.setTraceMask(player, min, max);
 		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
-		MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("mask.tracing_mask").replace("%min%", min + "").replace("%max%", max + ""));
+		MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("mask.tracing_mask").replace("%min%", min + "")
+				.replace("%max%", max + ""));
 	}
 
 	@SubCommand("help")
