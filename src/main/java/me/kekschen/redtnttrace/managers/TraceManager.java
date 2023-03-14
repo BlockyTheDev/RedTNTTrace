@@ -40,7 +40,7 @@ public class TraceManager {
 				if(tntLocations.size() != 0)
 					reportTNTLocations(tntLocations);
 			}
-		}.runTaskTimer(RedTNTTrace.getINSTANCE(), 0, 1);
+		}.runTaskTimer(RedTNTTrace.getInstance(), 0, 1);
 	}
 
 	private static void stopTrace() {
@@ -173,7 +173,7 @@ public class TraceManager {
 						}
 					}
 				}
-			}.runTaskTimer(RedTNTTrace.getINSTANCE(), 0, 500);
+			}.runTaskTimer(RedTNTTrace.getInstance(), 0, 500);
 		}
 	}
 

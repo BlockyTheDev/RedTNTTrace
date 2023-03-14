@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
+	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
 		TraceManager.hideTrace(event.getPlayer());
@@ -19,16 +20,17 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onTntExplode(EntityExplodeEvent event) {
-		if(event.getEntity() instanceof TNTPrimed) {
+		if (event.getEntity() instanceof TNTPrimed) {
 			TraceManager.reportTNTLocation(event.getEntity().getUniqueId(), event.getLocation());
 		}
 	}
 
 	@EventHandler
 	public void onEntityBlockChangeEvent(EntityChangeBlockEvent e) {
-		if(e.getEntityType() != EntityType.FALLING_BLOCK) return;
+		if (e.getEntityType() != EntityType.FALLING_BLOCK) return;
+		
 		FallingBlock fallingBlock = (FallingBlock) e.getEntity();
-		if(fallingBlock.getBlockData().getMaterial() == Material.TNT) {
+		if (fallingBlock.getBlockData().getMaterial() == Material.TNT) {
 			e.setCancelled(true);
 		}
 	}

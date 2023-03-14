@@ -10,14 +10,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RedTNTTrace extends JavaPlugin {
 
-	private static RedTNTTrace INSTANCE;
-	public static Plugin getINSTANCE() {
-		return INSTANCE;
-	}
+	private static RedTNTTrace instance;
+
 	public static LanguageHelper LANG;
+	
+	public static Plugin getInstance() {
+		return instance;
+	}
+	
 	@Override
 	public void onLoad() {
-		INSTANCE = this;
+		instance = this;
 		saveDefaultConfig();
 		LANG = new LanguageHelper(getConfig());
 		MessageAPI.setPrefix(LANG.getPrefix());
@@ -31,5 +34,6 @@ public final class RedTNTTrace extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		
 	}
 }

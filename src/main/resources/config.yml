@@ -1,4 +1,4 @@
-prefix: "&8[&4&lRed&f&lTNTTrace&8] &7"
+prefix: "&8[&4Red&fTNTTrace&8]&f: "
 messages:
   plugin_header: "&4&lRed&r&lTNTTrace &7- &fA plugin to trace TNT explosions"
   plugin_footer: "&7----------------------------------------------------"
