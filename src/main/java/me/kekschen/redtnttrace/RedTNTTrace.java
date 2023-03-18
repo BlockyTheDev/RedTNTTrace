@@ -12,22 +12,22 @@ public final class RedTNTTrace extends JavaPlugin {
 
 	private static RedTNTTrace instance;
 
-	public static LanguageHelper LANG;
-	
-	public static Plugin getInstance() {
-		return instance;
-	}
-	
+	public static LanguageHelper lang;
+	private RestrictionHelper restrictionHelper;
+
 	@Override
 	public void onLoad() {
+		
 		instance = this;
+		
 		saveDefaultConfig();
-		LANG = new LanguageHelper(getConfig());
-		MessageAPI.setPrefix(LANG.getPrefix());
+		lang = new LanguageHelper(getConfig());
+		MessageAPI.setPrefix(lang.getPrefix());
 	}
 
 	@Override
 	public void onEnable() {
+		
 		new RedTNTTraceCommand().registerSelf();
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 	}
@@ -35,5 +35,13 @@ public final class RedTNTTrace extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		
+	}
+
+	public static RedTNTTrace getInstance() {
+		return instance;
+	}
+	
+	public RestrictionHelper getRestrictionHelper() {
+		return restrictionHelper;
 	}
 }

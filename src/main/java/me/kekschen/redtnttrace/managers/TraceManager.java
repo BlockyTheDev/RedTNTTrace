@@ -32,12 +32,12 @@ public class TraceManager {
 			@Override
 			public void run() {
 				HashMap<UUID, Location> tntLocations = new HashMap<>();
-				for(World world : Bukkit.getWorlds()) {
-					for(TNTPrimed tnt : world.getEntitiesByClass(TNTPrimed.class)) {
+				for (World world : Bukkit.getWorlds()) {
+					for (TNTPrimed tnt : world.getEntitiesByClass(TNTPrimed.class)) {
 						tntLocations.put(tnt.getUniqueId(), tnt.getLocation());
 					}
 				}
-				if(tntLocations.size() != 0)
+				if (tntLocations.size() != 0)
 					reportTNTLocations(tntLocations);
 			}
 		}.runTaskTimer(RedTNTTrace.getInstance(), 0, 1);
@@ -81,7 +81,7 @@ public class TraceManager {
 		for (Player player : records.keySet()) {
 			TraceRecord record = records.get(player);
 			if (record.isInProgress) {
-				for(UUID uuid : locations.keySet()) {
+				for (UUID uuid : locations.keySet()) {
 					List<Location> locationList = record.tntLocations.getOrDefault(uuid, new ArrayList<>());
 					locationList.add(locations.get(uuid));
 					record.tntLocations.put(uuid, locationList);
@@ -112,7 +112,7 @@ public class TraceManager {
 
 	private static void showTraceTnt(Player player, Location location, boolean exploded, int id, int tick) {
 		FallingBlock tnt = spawnTntPreset(location);
-		if(isTraceOptionEnabled(player, TraceOption.SHOW_ID_TAGS)) {
+		if (isTraceOptionEnabled(player, TraceOption.SHOW_ID_TAGS)) {
 			if (exploded)
 				tnt.setCustomName("§7#" + id + "-" + id + " §4§lBOOM!");
 			else
@@ -129,17 +129,17 @@ public class TraceManager {
 		int amount = locations.size();
 		Location firstLocation = locations.get(0);
 		Location lastLocation = locations.get(amount - 1);
-		if(!isTraceOptionEnabled(player, TraceOption.SHOW_FUEL)) {
+		if (!isTraceOptionEnabled(player, TraceOption.SHOW_FUEL)) {
 			if (firstLocation.distance(lastLocation) < 10) return;
 		}
-		if(firstLocation.getWorld() != player.getWorld()) return;
+		if (firstLocation.getWorld() != player.getWorld()) return;
 		Location previousLocation = null;
 		boolean onlyExplosions = isTraceOptionEnabled(player, TraceOption.ONLY_EXPLOSIONS);
-		for(Location location : locations) {
+		for (Location location : locations) {
 			tick++;
-			if(previousLocation != null && location.distance(previousLocation) < 1)
+			if (previousLocation != null && location.distance(previousLocation) < 1)
 				continue;
-			if(onlyExplosions && tick != amount)
+			if (onlyExplosions && tick != amount)
 				continue;
 			showTraceTnt(player, location, tick == amount, id, tick);
 			previousLocation = location;
@@ -148,12 +148,12 @@ public class TraceManager {
 
 	public static void showTrace(Player player) {
 		TraceRecord record = records.getOrDefault(player, null);
-		if(record == null) return;
+		if (record == null) return;
 		Integer[] pair = traceMasks.getOrDefault(player.getUniqueId(), new Integer[]{ 0, Integer.MAX_VALUE });
 		int id = 0;
-		for(UUID tntUuid : record.tntLocations.keySet()) {
+		for (UUID tntUuid : record.tntLocations.keySet()) {
 			id++;
-			if(id < pair[0] || id > pair[1]) continue;
+			if (id < pair[0] || id > pair[1]) continue;
 			List<Location> locations = record.tntLocations.get(tntUuid);
 			showTracePart(player, id, locations);
 		}
@@ -162,13 +162,13 @@ public class TraceManager {
 
 	static BukkitTask antiDespawnTask = null;
 	private static void startAntiDespawnTask() {
-		if(spawnedTNTs.size() > 0 && antiDespawnTask == null) {
+		if (spawnedTNTs.size() > 0 && antiDespawnTask == null) {
 			antiDespawnTask = new BukkitRunnable() {
 				@Override
 				public void run() {
-					for(Player player : spawnedTNTs.keySet()) {
+					for (Player player : spawnedTNTs.keySet()) {
 						List<FallingBlock> fallingBlocks = spawnedTNTs.get(player);
-						for(FallingBlock fallingBlock : fallingBlocks) {
+						for (FallingBlock fallingBlock : fallingBlocks) {
 							fallingBlock.setTicksLived(1);
 						}
 					}
@@ -178,12 +178,12 @@ public class TraceManager {
 	}
 
 	public static boolean hideTrace(Player player) {
-		if(!spawnedTNTs.containsKey(player)) return false;
+		if (!spawnedTNTs.containsKey(player)) return false;
 		List<FallingBlock> tntList = spawnedTNTs.getOrDefault(player, new ArrayList<>());
-		for(FallingBlock tnt : tntList) {
+		for (FallingBlock tnt : tntList) {
 			tnt.remove();
 		}
-		if(antiDespawnTask != null && spawnedTNTs.size() == 0) {
+		if (antiDespawnTask != null && spawnedTNTs.size() == 0) {
 			antiDespawnTask.cancel();
 			antiDespawnTask = null;
 		}
@@ -191,7 +191,7 @@ public class TraceManager {
 	}
 
 	public static void hideAllTraces() {
-		for(Player player : spawnedTNTs.keySet()) {
+		for (Player player : spawnedTNTs.keySet()) {
 			hideTrace(player);
 		}
 	}
@@ -214,7 +214,7 @@ public class TraceManager {
 
 	public static void enableTraceOption(UUID uuid, TraceOption option) {
 		ArrayList<TraceOption> options = traceOptions.getOrDefault(uuid, new ArrayList<>());
-		if(!options.contains(option)) {
+		if (!options.contains(option)) {
 			options.add(option);
 			traceOptions.put(uuid, options);
 		}
@@ -222,7 +222,7 @@ public class TraceManager {
 
 	public static void disableTraceOption(UUID uuid, TraceOption option) {
 		ArrayList<TraceOption> options = traceOptions.getOrDefault(uuid, new ArrayList<>());
-		if(options.contains(option)) {
+		if (options.contains(option)) {
 			options.remove(option);
 			traceOptions.put(uuid, options);
 		}

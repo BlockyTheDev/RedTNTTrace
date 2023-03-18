@@ -17,8 +17,8 @@ public class RedTNTTraceCommand extends RedCommand {
 	@RestrictTo(Player.class)
 	public void toggleTrace(Player player, String[] args) {
 		TraceManager.toggleTrace(player);
-		MessageAPI.sendMessage(player, TraceManager.isTracing(player) ? RedTNTTrace.LANG.getString("trace.tnt_trace_enabled") 
-				: RedTNTTrace.LANG.getString("trace.tnt_trace_disabled"));
+		MessageAPI.sendMessage(player, TraceManager.isTracing(player) ? RedTNTTrace.lang.getString("trace.tnt_trace_enabled") 
+				: RedTNTTrace.lang.getString("trace.tnt_trace_disabled"));
 	}
 
 	@SubCommand("show")
@@ -27,15 +27,15 @@ public class RedTNTTraceCommand extends RedCommand {
 	public void viewTrace(Player player, String[] args) {
 		TraceRecord record = TraceManager.getTraceRecord(player);
 		if (record == null) {
-			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.no_trace_available"));
+			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("trace.no_trace_available"));
 			return;
 		}
 		if (record.isInProgress) {
-			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.trace_in_progress"));
+			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("trace.trace_in_progress"));
 			return;
 		}
 		if (record.tntLocations.size() == 0) {
-			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.no_tnt_traced"));
+			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("trace.no_tnt_traced"));
 			return;
 		}
 
@@ -48,9 +48,9 @@ public class RedTNTTraceCommand extends RedCommand {
 	public void hideTrace(Player player, String[] args) {
 		boolean hidden = TraceManager.hideTrace(player);
 		if (hidden) {
-			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.hid_trace"));
+			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("trace.hid_trace"));
 		} else {
-			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("trace.no_trace_to_hide"));
+			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("trace.no_trace_to_hide"));
 		}
 	}
 
@@ -63,7 +63,7 @@ public class RedTNTTraceCommand extends RedCommand {
 		try {
 			option = TraceOption.valueOf(args[1].toUpperCase());
 		} catch (IllegalArgumentException e) {
-			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("option.invalid_option").replace("%name%", args[1]));
+			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("option.invalid_option").replace("%name%", args[1]));
 			return;
 		}
 		boolean state = Boolean.parseBoolean(args[2]);
@@ -73,8 +73,8 @@ public class RedTNTTraceCommand extends RedCommand {
 			TraceManager.disableTraceOption(player, option);
 		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
-		MessageAPI.sendMessage(player, (state ? RedTNTTrace.LANG.getString("option.option_enabled") 
-				: RedTNTTrace.LANG.getString("option.option_disabled")).replace("%name%", args[1]));
+		MessageAPI.sendMessage(player, (state ? RedTNTTrace.lang.getString("option.option_enabled") 
+				: RedTNTTrace.lang.getString("option.option_disabled")).replace("%name%", args[1]));
 	}
 
 	@SubCommand("option list")
@@ -82,7 +82,7 @@ public class RedTNTTraceCommand extends RedCommand {
 	@RestrictTo(Player.class)
 	public void listOptions(Player player, String[] args) {
 		TraceOption[] options = TraceOption.values();
-		MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("option.option_list_header"));
+		MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("option.option_list_header"));
 		for (TraceOption option : options) {
 			MessageAPI.sendMessage(player, "§7- §f" + option.name().toLowerCase());
 		}
@@ -111,27 +111,27 @@ public class RedTNTTraceCommand extends RedCommand {
 			if (min < 0 || max < 0 || min > max)
 				throw new NumberFormatException();
 		} catch (NumberFormatException e) {
-			MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("mask.invalid_mask").replace("%mask%", args[1]));
+			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("mask.invalid_mask").replace("%mask%", args[1]));
 			return;
 		}
 		TraceManager.setTraceMask(player, min, max);
 		if (TraceManager.hideTrace(player) || TraceManager.hasTrace(player))
 			TraceManager.showTrace(player);
-		MessageAPI.sendMessage(player, RedTNTTrace.LANG.getString("mask.tracing_mask").replace("%min%", min + "")
+		MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("mask.tracing_mask").replace("%min%", min + "")
 				.replace("%max%", max + ""));
 	}
 
 	@SubCommand("help")
 	@Permission("rwm.redtnttrace.use")
 	public void help(CommandSender sender, String[] args) {
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("plugin_header"));
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.toggle_help"));
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.show_help"));
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.hide_help"));
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.option_help"));
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.option_list_help"));
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("help.mask_help"));
-		MessageAPI.sendMessageRaw(sender, RedTNTTrace.LANG.getString("plugin_footer"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("plugin_header"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("help.toggle_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("help.show_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("help.hide_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("help.option_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("help.option_list_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("help.mask_help"));
+		MessageAPI.sendMessageRaw(sender, RedTNTTrace.lang.getString("plugin_footer"));
 	}
 
 	@SubCommand("")

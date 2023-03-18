@@ -62,7 +62,7 @@ public class RedCommand implements CommandExecutor, TabCompleter {
 			if (method.isAnnotationPresent(Permission.class)) {
 				Permission permission = method.getAnnotation(Permission.class);
 				if (!sender.hasPermission(permission.value())) {
-					MessageAPI.sendMessage(sender, RedTNTTrace.LANG.getString("no-permission"));
+					MessageAPI.sendMessage(sender, RedTNTTrace.lang.getString("no-permission"));
 					return true;
 				}
 			}
@@ -82,7 +82,7 @@ public class RedCommand implements CommandExecutor, TabCompleter {
 				e.printStackTrace();
 			}
 		}
-		MessageAPI.sendMessage(sender, RedTNTTrace.LANG.getString("invalid-command"));
+		MessageAPI.sendMessage(sender, RedTNTTrace.lang.getString("invalid-command"));
 
 		return false;
 	}
