@@ -2,7 +2,8 @@ prefix: "&8[&4Red&fTNTTrace&8]&f: "
 messages:
   plugin_header: "&4&lRed&r&lTNTTrace &7- &fA plugin to trace TNT explosions"
   plugin_footer: "&7----------------------------------------------------"
-  no-permission: "&cYou don't have permission to use this command"
+  no_permission: "&cYou don't have the permission to use this command."
+  no_region_permission: "&cYou don't have the build permissions in this region."
   invalid-command: "&cThis command does not exist. Check &7/trace help &cfor a list of commands"
   trace:
     tnt_trace_enabled: "&7TNT tracing is now &aenabled"

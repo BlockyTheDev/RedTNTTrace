@@ -13,7 +13,7 @@
 
     <description>Records TNT movement to view path later on</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>https://github.com/Kek5chen</url>
@@ -63,6 +63,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>thbn</id>
+            <url>https://repo.thbn.me/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -76,6 +80,11 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.10.2</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.tehbrian.restrictionhelper</groupId>
+            <artifactId>restrictionhelper-spigot</artifactId>
+            <version>0.3.3</version>
         </dependency>
     </dependencies>
 </project>

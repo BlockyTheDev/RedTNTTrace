@@ -1,5 +1,7 @@
 package me.kekschen.redtnttrace.commands;
 
+import dev.tehbrian.restrictionhelper.core.ActionType;
+import dev.tehbrian.restrictionhelper.core.RestrictionHelper;
 import me.kekschen.redtnttrace.RedTNTTrace;
 import me.kekschen.redtnttrace.annotations.*;
 import me.kekschen.redtnttrace.api.MessageAPI;
@@ -16,6 +18,8 @@ public class RedTNTTraceCommand extends RedCommand {
 	@Permission("rwm.redtnttrace.use")
 	@RestrictTo(Player.class)
 	public void toggleTrace(Player player, String[] args) {
+		if (!hasBuildPermission(player)) return;
+		
 		TraceManager.toggleTrace(player);
 		MessageAPI.sendMessage(player, TraceManager.isTracing(player) ? RedTNTTrace.lang.getString("trace.tnt_trace_enabled") 
 				: RedTNTTrace.lang.getString("trace.tnt_trace_disabled"));
@@ -25,6 +29,8 @@ public class RedTNTTraceCommand extends RedCommand {
 	@Permission("rwm.redtnttrace.use")
 	@RestrictTo(Player.class)
 	public void viewTrace(Player player, String[] args) {
+		if (!hasBuildPermission(player)) return;
+		
 		TraceRecord record = TraceManager.getTraceRecord(player);
 		if (record == null) {
 			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("trace.no_trace_available"));
@@ -46,6 +52,8 @@ public class RedTNTTraceCommand extends RedCommand {
 	@Permission("rwm.redtnttrace.use")
 	@RestrictTo(Player.class)
 	public void hideTrace(Player player, String[] args) {
+		if (!hasBuildPermission(player)) return;
+		
 		boolean hidden = TraceManager.hideTrace(player);
 		if (hidden) {
 			MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("trace.hid_trace"));
@@ -138,5 +146,14 @@ public class RedTNTTraceCommand extends RedCommand {
 	@Permission("rwm.redtnttrace.use")
 	public void fallback(CommandSender sender, String[] args) {
 		help(sender, args);
+	}
+
+	private boolean hasBuildPermission(Player player) {
+		RestrictionHelper restrictionHelper = RedTNTTrace.getInstance().getRestrictionHelper();
+		
+		if (restrictionHelper.checkRestrictions(player, player.getLocation(), ActionType.PLACE)) return true;
+		
+		MessageAPI.sendMessage(player, RedTNTTrace.lang.getString("no_region_permission"));
+		return false;
 	}
 }
